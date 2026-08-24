@@ -14,7 +14,7 @@ A mobile-first private chat and file-sharing web app built for fast conversation
 
 ## ✦ What is Nuvio?
 
-Nuvio is a lightweight private workspace where people can find each other by **unique username**, send chat requests, create one-to-one conversations, and share the files they actually need — images, documents, code, ZIPs and more.
+Nuvio is a lightweight private workspace where people find each other by **unique username**, send chat requests, create one-to-one conversations, and share images, documents, code, ZIPs and other files.
 
 The goal is simple: **move something from your laptop to your phone without turning your life into a folder of random cloud links.**
 
@@ -22,17 +22,30 @@ The goal is simple: **move something from your laptop to your phone without turn
 
 | Feature | What it does |
 |---|---|
-| 🔐 Authentication | Email/password accounts through Supabase Auth |
+| 🔐 Username authentication | Create and access an account with username + password only |
 | @ Unique usernames | Every username is enforced as unique at database level |
 | 🔎 People search | Find users by username |
 | 🤝 Chat requests | Request, accept or decline conversations |
-| 💬 Private chat | One-to-one conversations with real-time messages |
+| 💬 Private chat | One-to-one conversations with realtime messages |
 | 📎 File sharing | Send images, documents, code, ZIPs and other files |
-| 🖼️ File previews | Image-aware attachments with secure signed downloads |
+| 🖼️ Secure downloads | Private attachments use signed URLs |
 | 📱 Responsive UI | Designed for phone and desktop |
-| ⚡ Realtime | Messages and requests update without manual refresh |
+| ⚡ Realtime | Messages update without manual refresh |
 | 🛡️ RLS security | Database access is restricted by authenticated membership |
 | 📦 PWA | Install Nuvio like an app |
+
+## Authentication
+
+Nuvio intentionally has **no email field or email confirmation flow**.
+
+Users provide:
+
+```text
+Username
+Password
+```
+
+A small Supabase Edge Function validates the username, enforces uniqueness, creates a confirmed Auth identity, and the client immediately signs the user in. The email address used internally by Supabase is never requested, displayed, or exposed as part of the Nuvio user experience.
 
 ## Security model
 
@@ -58,7 +71,7 @@ Nuvio does **not** trust the frontend to keep conversations private.
 
 Every conversation is backed by membership rows. Message reads/writes require membership, and storage access is restricted to files belonging to conversations the authenticated user belongs to.
 
-The browser only receives the **publishable** Supabase client key. No service-role secret is shipped to the frontend.
+The browser only receives the **publishable** Supabase key. The service-role key remains inside the Edge Function and is never shipped to the frontend.
 
 ## Data model
 
@@ -81,7 +94,7 @@ profiles
 ## Tech stack
 
 - **Frontend:** HTML, CSS, Vanilla JavaScript
-- **Auth:** Supabase Auth
+- **Auth:** Supabase Auth + Nuvio username gateway
 - **Database:** PostgreSQL via Supabase
 - **Realtime:** Supabase Realtime
 - **Files:** Supabase Storage
@@ -102,7 +115,7 @@ Then open:
 http://localhost:8080
 ```
 
-The production Supabase project is already configured with the required Nuvio schema, RLS policies, storage bucket and realtime tables.
+The production Supabase project is configured with the Nuvio schema, RLS policies, storage bucket, realtime tables and username authentication function.
 
 ## Supabase schema
 
@@ -115,14 +128,15 @@ The Nuvio backend contains:
 - `nuvio_messages`
 - `nuvio_attachments`
 - private `nuvio-files` Storage bucket
+- `nuvio-auth` Edge Function
 
-The account trigger creates a profile automatically after registration. Username uniqueness is enforced with a case-insensitive database index, not just a client-side check.
+Username uniqueness is enforced at the database level rather than relying only on JavaScript validation.
 
 ## Project structure
 
 ```text
 nuvio/
-├── index.html       # App shell and auth UI
+├── index.html       # App shell and username auth UI
 ├── styles.css       # Responsive Nuvio design system
 ├── app.js           # Auth, search, requests, chat and files
 ├── manifest.json    # PWA metadata
@@ -143,7 +157,8 @@ nuvio/
 
 ## Roadmap
 
-- [x] Account registration and login
+- [x] Username/password registration
+- [x] Username/password login
 - [x] Unique usernames
 - [x] Username search
 - [x] Chat requests
