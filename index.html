@@ -14,14 +14,13 @@
   <div class="auth-card">
     <div class="auth-copy"><span class="eyebrow">PRIVATE WORKSPACE</span><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in with your Nuvio username.</p></div>
     <form id="auth-form">
-      <label id="username-field"><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label>
-      <label id="email-field" hidden><span>Email</span><input id="email" type="email" autocomplete="email"></label>
+      <label><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label>
       <label><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="6" maxlength="128" placeholder="••••••••" required></label>
       <label id="display-field" hidden><span>Display name <small>optional</small></span><input id="display-name" maxlength="60" placeholder="Your name"></label>
       <button class="primary full" id="auth-submit" type="submit">Sign in</button>
     </form>
     <div class="auth-links"><button class="link-button" id="auth-toggle" type="button">Create an account</button></div>
-    <p class="auth-note">No email required. Usernames are unique and private conversations are protected by database access rules.</p>
+    <p class="auth-note">Username and password only. No email is required.</p>
   </div>
 </div>
 <div id="app" class="app-shell hidden">
