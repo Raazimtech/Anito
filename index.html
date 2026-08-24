@@ -1,1 +1,47 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#090a0f"><meta name="color-scheme" content="dark"><title>Anito — Anime, without the clutter.</title><meta name="description" content="Anito is a sleek anime discovery and streaming interface powered by the HiAnime API."><link rel="manifest" href="manifest.json"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head><body><div id="toast-root" aria-live="polite"></div><header class="topbar"><a class="brand" href="#home" data-route="home"><span class="brand-mark">A</span><span>anito</span></a><nav class="desktop-nav"><button data-route="home">Home</button><button data-route="discover">Discover</button><button data-route="bookmarks">Bookmarks</button><button data-route="history">History</button></nav><div class="header-actions"><button class="icon-btn" data-open-search aria-label="Search">⌕</button><button class="profile-btn" data-route="settings" aria-label="Settings">◉</button></div></header><main id="app" class="app-shell"><section class="view active-view" data-view="home"><div id="hero" class="hero"></div><section class="section" id="continue-section" hidden><div class="section-head"><div><span class="kicker">PICK UP WHERE YOU LEFT OFF</span><h2>Continue watching</h2></div><button class="text-btn" data-route="history">See all</button></div><div id="continue-row" class="poster-row"></div></section><section class="section"><div class="section-head"><div><span class="kicker">RIGHT NOW</span><h2>Trending</h2></div><button class="text-btn" data-route="discover">Explore</button></div><div id="trending-grid" class="poster-grid"></div></section><section class="section"><div class="section-head"><div><span class="kicker">THE CROWD'S PICKS</span><h2>Most popular</h2></div></div><div id="popular-grid" class="poster-grid"></div></section><section class="section"><div class="section-head"><div><span class="kicker">JUST DROPPED</span><h2>Latest episodes</h2></div></div><div id="latest-grid" class="poster-grid"></div></section></section><section class="view" data-view="discover"><div class="page-title"><span class="kicker">DISCOVER</span><h1>Find your next obsession.</h1><p>Browse popular, airing, completed and newly added anime.</p></div><div class="filter-bar"><button class="filter active" data-list="popular">Popular</button><button class="filter" data-list="airing">Airing</button><button class="filter" data-list="recent">Recently updated</button><button class="filter" data-list="completed">Completed</button><button class="filter" data-list="dubbed">Dubbed</button></div><div id="discover-grid" class="poster-grid large-grid"></div></section><section class="view" data-view="bookmarks"><div class="page-title"><span class="kicker">YOUR LIBRARY</span><h1>Bookmarks</h1><p>Anime you don't want to lose.</p></div><div id="bookmarks-grid" class="poster-grid large-grid"></div></section><section class="view" data-view="history"><div class="page-title"><span class="kicker">YOUR HISTORY</span><h1>Keep watching.</h1><p>Your progress stays on this device.</p></div><div id="history-grid" class="poster-grid large-grid"></div></section><section class="view" data-view="settings"><div class="page-title"><span class="kicker">ANITO</span><h1>Settings</h1><p>Small controls. No clutter.</p></div><div class="settings-card"><div><strong>Anime service</strong><span>Anito connects automatically to its project-owned Supabase API gateway. There is nothing to configure.</span></div><span class="status-pill">● Connected</span></div><div class="settings-card"><div><strong>Local data</strong><span>Clear bookmarks and watch history stored in this browser.</span></div><button class="ghost-btn" id="clear-data">Clear data</button></div></section><section class="view" data-view="search"><div class="search-page"><div class="search-input-wrap"><span>⌕</span><input id="search-input" autocomplete="off" placeholder="Search anime..."></div><div id="search-results" class="poster-grid large-grid"></div></div></section><section class="view" data-view="detail"><div id="detail-content"></div></section><section class="view" data-view="watch"><div id="watch-content"></div></section></main><nav class="mobile-nav"><button data-route="home"><span>⌂</span>Home</button><button data-route="discover"><span>◈</span>Discover</button><button data-route="bookmarks"><span>♡</span>Library</button><button data-route="history"><span>◷</span>History</button><button data-route="settings"><span>⚙</span>More</button></nav><div id="modal-root"></div><script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script><script src="app.js"></script><script src="enhance.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020"><meta name="color-scheme" content="dark"><title>Nuvio — Private chat & file sharing</title>
+<meta name="description" content="Nuvio is a private chat and file-sharing workspace.">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div id="toast" class="toast" aria-live="polite"></div>
+<div id="auth" class="auth-shell">
+  <div class="auth-brand"><span class="logo-mark">N</span><div><b>nuvio</b><span>private by design</span></div></div>
+  <div class="auth-card">
+    <div class="auth-copy"><span class="eyebrow">PRIVATE WORKSPACE</span><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in to your conversations and files.</p></div>
+    <form id="auth-form">
+      <label id="username-field"><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label>
+      <label><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="••••••••" required></label>
+      <label id="display-field"><span>Display name <small>optional</small></span><input id="display-name" maxlength="60" placeholder="Your name"></label>
+      <button class="primary full" id="auth-submit" type="submit">Sign in</button>
+    </form>
+    <button class="link-button" id="auth-toggle" type="button">Create an account</button>
+    <p class="auth-note">Unique usernames are enforced in the database. Private chats are protected by row-level security.</p>
+  </div>
+</div>
+<div id="app" class="app-shell hidden">
+  <aside class="sidebar">
+    <div class="brand"><span class="logo-mark">N</span><div><b>nuvio</b><span>private workspace</span></div></div>
+    <button class="new-chat" id="new-chat"><span>＋</span> New conversation</button>
+    <div class="side-label">CONVERSATIONS</div><div id="conversation-list" class="conversation-list"></div>
+    <div class="sidebar-bottom"><button id="profile-btn" class="profile-mini"></button><button id="signout" class="icon-button" title="Sign out">↪</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="mobile-brand"><span class="logo-mark">N</span><b>nuvio</b></div><div class="top-actions"><button id="search-btn" class="icon-button" title="Find people">⌕</button><button id="mobile-profile" class="icon-button">●</button></div></header>
+    <section id="welcome" class="welcome"><div class="welcome-icon">N</div><span class="eyebrow">YOUR PRIVATE SPACE</span><h1>Keep your conversations<br><em>and files together.</em></h1><p>Search for someone by username, send a request, and start a private conversation. Share images, code, documents and more.</p><button class="primary" id="welcome-search">Find someone</button></section>
+    <section id="chat" class="chat hidden">
+      <header class="chat-head"><button id="back-mobile" class="icon-button back">‹</button><div id="chat-avatar" class="avatar">?</div><div class="chat-person"><strong id="chat-name">Conversation</strong><span id="chat-username"></span></div><button id="chat-info" class="icon-button">⋯</button></header>
+      <div id="messages" class="messages"></div>
+      <form id="composer" class="composer"><input id="message-input" maxlength="10000" autocomplete="off" placeholder="Write a message…"><input id="file-input" type="file" hidden><button type="button" id="attach" class="attach" title="Attach file">＋</button><button type="submit" class="send" title="Send">↑</button></form>
+    </section>
+  </main>
+</div>
+<div id="modal" class="modal-root hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>
