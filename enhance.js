@@ -1,0 +1,1 @@
+document.addEventListener('click',e=>{const card=e.target.closest('.anime-card[data-anime]');if(card&&!e.target.closest('button,a')){if(typeof openAnime==='function')openAnime(card.dataset.anime)}});
