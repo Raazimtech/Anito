@@ -12,16 +12,16 @@
 <div id="auth" class="auth-shell">
   <div class="auth-brand"><span class="logo-mark">N</span><div><b>nuvio</b><span>private by design</span></div></div>
   <div class="auth-card">
-    <div class="auth-copy"><span class="eyebrow">PRIVATE WORKSPACE</span><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in to your conversations and files.</p></div>
+    <div class="auth-copy"><span class="eyebrow">PRIVATE WORKSPACE</span><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in with your Nuvio username.</p></div>
     <form id="auth-form">
-      <label id="username-field" hidden><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname"></label>
-      <label><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
-      <label><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="••••••••" required></label>
+      <label id="username-field"><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label>
+      <label id="email-field" hidden><span>Email</span><input id="email" type="email" autocomplete="email"></label>
+      <label><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="6" maxlength="128" placeholder="••••••••" required></label>
       <label id="display-field" hidden><span>Display name <small>optional</small></span><input id="display-name" maxlength="60" placeholder="Your name"></label>
       <button class="primary full" id="auth-submit" type="submit">Sign in</button>
     </form>
-    <div class="auth-links"><button class="link-button" id="auth-toggle" type="button">Create an account</button><button class="link-button" id="resend-confirm" type="button" hidden>Resend confirmation</button></div>
-    <p class="auth-note">Unique usernames are enforced in the database. Private chats are protected by row-level security.</p>
+    <div class="auth-links"><button class="link-button" id="auth-toggle" type="button">Create an account</button></div>
+    <p class="auth-note">No email required. Usernames are unique and private conversations are protected by database access rules.</p>
   </div>
 </div>
 <div id="app" class="app-shell hidden">
@@ -32,10 +32,10 @@
     <div class="sidebar-bottom"><button id="profile-btn" class="profile-mini"></button><button id="signout" class="icon-button" title="Sign out">↪</button></div>
   </aside>
   <main class="main">
-    <header class="topbar"><div class="mobile-brand"><span class="logo-mark">N</span><b>nuvio</b></div><div class="top-actions"><button id="install-app" class="install-button" hidden>Install app</button><button id="search-btn" class="icon-button" title="Find people">⌕</button><button id="mobile-profile" class="icon-button">●</button></div></header>
+    <header class="topbar"><div class="mobile-brand"><span class="logo-mark">N</span><b>nuvio</b></div><div class="top-actions"><button id="install-app" class="install-button" hidden>Install app</button><button id="search-btn" class="icon-button" title="Find people">⌕</button><button id="mobile-profile" class="icon-button" title="Profile">●</button></div></header>
     <section id="welcome" class="welcome"><div class="welcome-icon">N</div><span class="eyebrow">YOUR PRIVATE SPACE</span><h1>Keep your conversations<br><em>and files together.</em></h1><p>Search for someone by username, send a request, and start a private conversation. Share images, code, documents and more.</p><div class="welcome-actions"><button class="primary" id="welcome-search">Find someone</button><button class="secondary" id="welcome-install" hidden>Install Nuvio</button></div></section>
     <section id="chat" class="chat hidden">
-      <header class="chat-head"><button id="back-mobile" class="icon-button back">‹</button><div id="chat-avatar" class="avatar">?</div><div class="chat-person"><strong id="chat-name">Conversation</strong><span id="chat-username"></span></div><button id="chat-info" class="icon-button">⋯</button></header>
+      <header class="chat-head"><button id="back-mobile" class="icon-button back">‹</button><div id="chat-avatar" class="avatar">?</div><div class="chat-person"><strong id="chat-name">Conversation</strong><span id="chat-username"></span></div><button id="chat-info" class="icon-button" title="Conversation info">⋯</button></header>
       <div id="messages" class="messages"></div>
       <form id="composer" class="composer"><input id="message-input" maxlength="10000" autocomplete="off" placeholder="Write a message…"><input id="file-input" type="file" hidden><button type="button" id="attach" class="attach" title="Attach file">＋</button><button type="submit" class="send" title="Send">↑</button></form>
     </section>
