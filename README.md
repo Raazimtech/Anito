@@ -4,7 +4,7 @@
 
 ### Private conversations. Shared files. One quiet workspace.
 
-A mobile-first private chat and file-sharing web app built for fast conversations between trusted people.
+A clean, username-first chat and file-sharing app for moving conversations and files between the devices you actually use.
 
 **Built by Raazim Tech**
 
@@ -12,94 +12,104 @@ A mobile-first private chat and file-sharing web app built for fast conversation
 
 ---
 
-## ✦ What is Nuvio?
+## What is Nuvio?
 
-Nuvio is a lightweight private workspace where people find each other by **unique username**, send chat requests, create one-to-one conversations, and share images, documents, code, ZIPs and other files.
+Nuvio is a private one-to-one messaging workspace. Users create an account with a **unique username and password**, find other people by username, send chat requests, and share messages and files after a request is accepted.
 
-The goal is simple: **move something from your laptop to your phone without turning your life into a folder of random cloud links.**
+No email field. No email confirmation. No Gmail dependency.
 
-## Features
+## Core features
 
-| Feature | What it does |
-|---|---|
-| 🔐 Username authentication | Create and access an account with username + password only |
-| @ Unique usernames | Every username is enforced as unique at database level |
-| 🔎 People search | Find users by username |
-| 🤝 Chat requests | Request, accept or decline conversations |
-| 💬 Private chat | One-to-one conversations with realtime messages |
-| 📎 File sharing | Send images, documents, code, ZIPs and other files |
-| 🖼️ Secure downloads | Private attachments use signed URLs |
-| 📱 Responsive UI | Designed for phone and desktop |
-| ⚡ Realtime | Messages update without manual refresh |
-| 🛡️ RLS security | Database access is restricted by authenticated membership |
-| 📦 PWA | Install Nuvio like an app |
+- **Username + password accounts** — simple registration and login
+- **Unique usernames** — enforced by the backend
+- **People search** — search usernames quickly
+- **Chat requests** — request, accept, or decline
+- **Private one-to-one chat** — membership controls access
+- **Realtime messages** — conversations update without refresh
+- **File sharing** — images, documents, code, ZIPs, and other files
+- **Private storage** — attachments are protected and served with short-lived signed URLs
+- **Responsive UI** — designed for phones first, with a desktop layout
+- **PWA** — install Nuvio as an app
+- **Install button** — appears when the browser exposes the install prompt
 
 ## Authentication
 
-Nuvio intentionally has **no email field or email confirmation flow**.
-
-Users provide:
+The user-facing authentication flow is intentionally:
 
 ```text
-Username
-Password
+Create account
+    ↓
+Username + Password
+    ↓
+Account created
+    ↓
+Logged in
 ```
 
-A small Supabase Edge Function validates the username, enforces uniqueness, creates a confirmed Auth identity, and the client immediately signs the user in. The email address used internally by Supabase is never requested, displayed, or exposed as part of the Nuvio user experience.
-
-## Security model
-
-Nuvio does **not** trust the frontend to keep conversations private.
+And returning users simply use:
 
 ```text
-                         SUPABASE AUTH
-                              │
-                              ▼
-                       authenticated user
-                              │
-                 ┌────────────┴────────────┐
-                 ▼                         ▼
-        conversation membership       username identity
-                 │                         │
-                 ▼                         ▼
-          RLS-protected data        unique database index
-                 │
-        ┌────────┼─────────┐
-        ▼        ▼         ▼
-     messages  files   attachments
+Username + Password
+    ↓
+Logged in
 ```
 
-Every conversation is backed by membership rows. Message reads/writes require membership, and storage access is restricted to files belonging to conversations the authenticated user belongs to.
+Nuvio does not ask for an email address or run email confirmation. A small server-side authentication function handles the username-to-auth-identity bridge so the browser never needs an email field.
 
-The browser only receives the **publishable** Supabase key. The service-role key remains inside the Edge Function and is never shipped to the frontend.
+## Security
 
-## Data model
+The frontend is **not** the security boundary.
 
 ```text
-profiles
-   │
-   ├── chat_requests
-   │
-   └── conversation_members
-              │
-              ▼
-        conversations
-              │
-              ├── messages
-              │      └── attachments
-              │
-              └── private storage
+Authenticated user
+       │
+       ▼
+Conversation membership
+       │
+   ┌───┼─────────┐
+   ▼   ▼         ▼
+messages     attachments   files
+   │             │           │
+   └──────── RLS ────────────┘
+```
+
+PostgreSQL Row Level Security controls access to conversations, members, messages, requests and attachments. Storage access is restricted to authorized conversation members.
+
+The browser uses only the Supabase publishable key. Sensitive server credentials remain server-side.
+
+## Architecture
+
+```text
+Nuvio Web / PWA
+      │
+      ├── Supabase Auth gateway
+      │
+      ├── PostgreSQL
+      │     ├── profiles
+      │     ├── requests
+      │     ├── conversations
+      │     ├── members
+      │     ├── messages
+      │     └── attachments
+      │
+      ├── Supabase Realtime
+      │
+      └── Supabase Storage
+             └── private files
 ```
 
 ## Tech stack
 
-- **Frontend:** HTML, CSS, Vanilla JavaScript
-- **Auth:** Supabase Auth + Nuvio username gateway
-- **Database:** PostgreSQL via Supabase
-- **Realtime:** Supabase Realtime
-- **Files:** Supabase Storage
-- **Security:** PostgreSQL Row Level Security
-- **PWA:** Web App Manifest + Service Worker
+- HTML5
+- Modern CSS
+- Vanilla JavaScript
+- Supabase Auth
+- PostgreSQL
+- Supabase Realtime
+- Supabase Storage
+- PostgreSQL RLS
+- Web App Manifest
+- Service Worker
 
 ## Run locally
 
@@ -109,74 +119,49 @@ cd nuvio
 python -m http.server 8080
 ```
 
-Then open:
-
-```text
-http://localhost:8080
-```
-
-The production Supabase project is configured with the Nuvio schema, RLS policies, storage bucket, realtime tables and username authentication function.
-
-## Supabase schema
-
-The Nuvio backend contains:
-
-- `nuvio_profiles`
-- `nuvio_chat_requests`
-- `nuvio_conversations`
-- `nuvio_conversation_members`
-- `nuvio_messages`
-- `nuvio_attachments`
-- private `nuvio-files` Storage bucket
-- `nuvio-auth` Edge Function
-
-Username uniqueness is enforced at the database level rather than relying only on JavaScript validation.
+Open `http://localhost:8080`.
 
 ## Project structure
 
 ```text
 nuvio/
-├── index.html       # App shell and username auth UI
-├── styles.css       # Responsive Nuvio design system
-├── app.js           # Auth, search, requests, chat and files
-├── manifest.json    # PWA metadata
-├── sw.js            # Offline app shell caching
-├── favicon.svg      # Nuvio icon
+├── index.html       # Nuvio application shell
+├── styles.css       # New responsive visual system
+├── app.js           # Authentication, chat, search and file logic
+├── manifest.json    # PWA configuration
+├── sw.js            # Versioned service-worker cache
+├── favicon.svg      # Nuvio brand mark
 └── README.md
 ```
 
-## Product principles
+## Design direction
 
-**Private by default.** Access should come from authentication and database policies, not hidden buttons.
+The rebuilt interface intentionally avoids the old dashboard/document look. It uses a darker product-style interface, new **Manrope** and **Plus Jakarta Sans** typography, compact controls, restrained borders, large touch targets, and a focused conversation layout.
 
-**Fast to understand.** Nuvio should feel like a tool, not an admin dashboard.
-
-**Useful on a phone.** The original purpose is practical file transfer between devices, so mobile is a first-class experience.
-
-**No unnecessary complexity.** A small, focused product beats a giant unfinished feature list.
+The existing Nuvio logo/favicon is preserved instead of replacing the identity with a generic generated icon.
 
 ## Roadmap
 
 - [x] Username/password registration
 - [x] Username/password login
-- [x] Unique usernames
+- [x] Unique username enforcement
 - [x] Username search
 - [x] Chat requests
-- [x] Private one-to-one conversations
-- [x] Realtime messaging
+- [x] Private conversations
+- [x] Realtime messages
 - [x] File uploads
-- [x] Secure signed file access
-- [x] Row-level security
-- [x] PWA shell
+- [x] Signed downloads
+- [x] PWA install flow
+- [x] Versioned service-worker cache
 - [ ] Message reactions
-- [ ] Drag-and-drop desktop uploads
-- [ ] Image gallery inside conversations
+- [ ] Drag-and-drop uploads
+- [ ] Image gallery
 - [ ] Message search
-- [ ] Optional profile avatars
+- [ ] Profile avatars
 
 ## License
 
-This project is maintained for personal use and experimentation by **Raazim Tech**.
+Maintained for personal use and experimentation by **Raazim Tech**.
 
 ---
 
