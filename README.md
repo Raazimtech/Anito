@@ -4,7 +4,7 @@
 
 ### Anime, without the clutter.
 
-A polished anime discovery and streaming interface built around the unofficial **HiAnime API** — search, discover, bookmark, browse full episode lists, choose SUB/DUB, and play available streams in a fast, app-like UI.
+A polished anime discovery and watching experience built around the unofficial **HiAnime API** — discover anime, search, bookmark shows, browse full episode lists, choose SUB/DUB, and play available streams in a fast, app-like interface.
 
 **Built by Raazim Tech**
 
@@ -14,26 +14,26 @@ A polished anime discovery and streaming interface built around the unofficial *
 
 ## ✦ What is Anito?
 
-**Anito** is the complete replacement for the old Movied project in this repository. The repository is now dedicated to an anime-first experience rather than movies.
+**Anito** is the anime-first successor to the old Movied project. The repository is now dedicated entirely to anime discovery and watching.
 
-The goal is simple:
+The product flow is intentionally simple:
 
 > **Open Anito → find anime → open the show → choose an episode → choose SUB/DUB → watch.**
 
-No paper-like dashboard. No bloated UI. No random feature soup.
+No movie catalog. No paper-like dashboard. No bloated feature soup.
 
 ### Core experience
 
 - **Discover** trending, popular, airing, recently updated, completed and dubbed anime.
-- **Search** anime by title.
+- **Search** anime by title with pagination-ready API support.
 - **Anime details** with synopsis, score, genres, type, duration and episode counts.
 - **Full episode browser** with individual episode selection.
 - **SUB / DUB switching** when a dub source exists.
-- **Streaming source selection** through HiAnime episode-server and stream endpoints.
-- **HLS playback** using HLS.js where supported by the browser.
-- **Bookmarks** stored locally for instant access.
+- **Streaming source discovery** through HiAnime episode-server and stream endpoints.
+- **HLS playback** with subtitle-track support where available.
+- **Bookmarks** for quickly saving anime.
 - **Watch history** with episode and playback progress.
-- **Continue watching** from the home screen.
+- **Continue watching** from the home experience.
 - **PWA support** for an app-like install experience.
 - **Responsive mobile UI** with bottom navigation.
 
@@ -42,7 +42,7 @@ No paper-like dashboard. No bloated UI. No random feature soup.
 ```text
                     ┌──────────────────────┐
                     │        ANITO         │
-                    │  HTML · CSS · JS      │
+                    │     HTML · CSS · JS  │
                     └──────────┬───────────┘
                                │
               ┌────────────────┼────────────────┐
@@ -67,15 +67,15 @@ No paper-like dashboard. No bloated UI. No random feature soup.
 
 ## HiAnime API
 
-Anito is designed around the community-maintained **HiAnime API**. The API exposes anime home data, search, details, episode lists, episode servers and streaming links, including SUB/DUB sources.
+Anito is designed around the community-maintained **HiAnime API**. Its documented API provides anime home data, search, detailed information, episode lists, episode servers, streaming links, subtitles, and SUB/DUB sources.
 
-The HiAnime API project recommends **personal-use deployments** rather than relying on a shared public instance. Anito is intended as a private/personal project, and its API layer should therefore be deployed and controlled by the project owner.
+The API maintainers explicitly recommend **deploying your own instance for personal use** rather than depending on a shared public endpoint. Anito follows that model: the application is intended as a private/personal project, and the API layer should be controlled by the project owner.
 
-### API configuration
+### No API setup for Anito users
 
-The frontend is designed to connect to the project's own HiAnime API deployment. There is intentionally no requirement for users to obtain an API key or configure third-party credentials.
+Anito is **not** designed to ask the user for an API key or API URL. The application should connect to its configured project-owned API deployment automatically.
 
-The API exposes endpoints such as:
+Typical API routes include:
 
 ```text
 GET /api/v1/home
@@ -93,7 +93,7 @@ GET /api/v1/stream?id=:episodeId&server=:server&type=sub
 | UI | HTML5 + CSS3 |
 | Application | Vanilla JavaScript |
 | Anime data | HiAnime API |
-| Video | HLS.js |
+| Video | HTML5 Video + HLS.js |
 | Storage | Browser LocalStorage |
 | PWA | Web App Manifest + Service Worker |
 | Hosting | Static hosting compatible |
@@ -115,9 +115,21 @@ Anito/
 
 ## Design direction
 
-Anito uses a **dark, restrained interface** with strong typography, compact cards, deliberate spacing and app-style navigation. The interface is built around the anime artwork and watching experience rather than decorative panels.
+Anito is designed to feel like a **real streaming application**, not a website template.
 
-The mobile experience uses a persistent bottom navigation bar, while larger screens use a compact navigation layout.
+The visual system focuses on:
+
+- Dark, restrained surfaces
+- Strong typography
+- Large, high-quality anime artwork
+- Compact but readable cards
+- Consistent spacing and hierarchy
+- Minimal visual noise
+- Fast interactions
+- Mobile-first navigation
+- A dedicated watching experience
+
+The mobile experience uses a persistent bottom navigation bar, while larger screens make better use of available width without turning the interface into a dashboard.
 
 ## Important note
 
@@ -127,7 +139,7 @@ Use Anito only where you have the right to access the content and follow the law
 
 ## Development
 
-Because the frontend is static, you can run it with any local static server:
+The frontend is static and can be served with any local static server:
 
 ```bash
 python -m http.server 8080
@@ -143,12 +155,13 @@ The application connects to the project's configured HiAnime API deployment.
 
 ## Roadmap
 
+- [ ] Project-owned HiAnime API deployment
 - [ ] User accounts and cloud-synced library
 - [ ] Multi-device watch progress
 - [ ] Advanced anime filters
-- [ ] Schedule / airing calendar
+- [ ] Airing schedule / calendar
 - [ ] Recommendations based on viewing history
-- [ ] Better player controls and source fallback
+- [ ] Smarter streaming-source fallback
 - [ ] Character and voice-actor pages
 - [ ] Watch-party experience
 
