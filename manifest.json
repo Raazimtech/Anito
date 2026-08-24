@@ -1,15 +1,1 @@
-{
-  "name": "Movied — Free Movie Streaming",
-  "short_name": "Movied",
-  "description": "Discover and watch free movies in a fast, app-like experience.",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
-  "orientation": "portrait-primary",
-  "background_color": "#0c0c0e",
-  "theme_color": "#0c0c0e",
-  "icons": [
-    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
-  ]
-}
+{"name":"Aniki — Anime","short_name":"Aniki","start_url":"./","display":"standalone","background_color":"#090a0f","theme_color":"#090a0f","description":"A sleek anime discovery and streaming interface powered by the HiAnime API.","icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
