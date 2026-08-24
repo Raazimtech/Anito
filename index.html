@@ -2,45 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1020"><meta name="color-scheme" content="dark"><title>Nuvio — Private chat & file sharing</title>
-<meta name="description" content="Nuvio is a private chat and file-sharing workspace.">
-<link rel="manifest" href="manifest.json"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="theme-color" content="#07090d"><meta name="color-scheme" content="dark">
+<title>Nuvio — Private conversations</title><meta name="description" content="Nuvio is a private username-first chat and file sharing app.">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div id="toast" class="toast" aria-live="polite"></div>
-<div id="auth" class="auth-shell">
-  <div class="auth-brand"><span class="logo-mark">N</span><div><b>nuvio</b><span>private by design</span></div></div>
-  <div class="auth-card">
-    <div class="auth-copy"><span class="eyebrow">PRIVATE WORKSPACE</span><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in with your Nuvio username.</p></div>
-    <form id="auth-form">
-      <label><span>Username</span><input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label>
-      <label><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="6" maxlength="128" placeholder="••••••••" required></label>
-      <label id="display-field" hidden><span>Display name <small>optional</small></span><input id="display-name" maxlength="60" placeholder="Your name"></label>
-      <button class="primary full" id="auth-submit" type="submit">Sign in</button>
-    </form>
-    <div class="auth-links"><button class="link-button" id="auth-toggle" type="button">Create an account</button></div>
-    <p class="auth-note">Username and password only. No email is required.</p>
-  </div>
-</div>
-<div id="app" class="app-shell hidden">
-  <aside class="sidebar">
-    <div class="brand"><span class="logo-mark">N</span><div><b>nuvio</b><span>private workspace</span></div></div>
-    <button class="new-chat" id="new-chat"><span>＋</span> New conversation</button>
-    <div class="side-label">CONVERSATIONS</div><div id="conversation-list" class="conversation-list"></div>
-    <div class="sidebar-bottom"><button id="profile-btn" class="profile-mini"></button><button id="signout" class="icon-button" title="Sign out">↪</button></div>
-  </aside>
-  <main class="main">
-    <header class="topbar"><div class="mobile-brand"><span class="logo-mark">N</span><b>nuvio</b></div><div class="top-actions"><button id="install-app" class="install-button" hidden>Install app</button><button id="search-btn" class="icon-button" title="Find people">⌕</button><button id="mobile-profile" class="icon-button" title="Profile">●</button></div></header>
-    <section id="welcome" class="welcome"><div class="welcome-icon">N</div><span class="eyebrow">YOUR PRIVATE SPACE</span><h1>Keep your conversations<br><em>and files together.</em></h1><p>Search for someone by username, send a request, and start a private conversation. Share images, code, documents and more.</p><div class="welcome-actions"><button class="primary" id="welcome-search">Find someone</button><button class="secondary" id="welcome-install" hidden>Install Nuvio</button></div></section>
-    <section id="chat" class="chat hidden">
-      <header class="chat-head"><button id="back-mobile" class="icon-button back">‹</button><div id="chat-avatar" class="avatar">?</div><div class="chat-person"><strong id="chat-name">Conversation</strong><span id="chat-username"></span></div><button id="chat-info" class="icon-button" title="Conversation info">⋯</button></header>
-      <div id="messages" class="messages"></div>
-      <form id="composer" class="composer"><input id="message-input" maxlength="10000" autocomplete="off" placeholder="Write a message…"><input id="file-input" type="file" hidden><button type="button" id="attach" class="attach" title="Attach file">＋</button><button type="submit" class="send" title="Send">↑</button></form>
-    </section>
-  </main>
-</div>
-<div id="modal" class="modal-root hidden"></div>
-<script src="app.js"></script>
-</body>
-</html>
+<section id="auth" class="auth-page"><div class="auth-brand"><span class="brand-icon">N</span><span>nuvio</span></div><div class="auth-panel"><div class="auth-kicker">PRIVATE MESSAGING</div><h1 id="auth-title">Welcome back.</h1><p id="auth-subtitle">Sign in with your username.</p><form id="auth-form"><label>Username<input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="yourname" required></label><label>Password<input id="password" type="password" autocomplete="current-password" minlength="6" maxlength="128" placeholder="••••••••" required></label><label id="display-wrap" class="hidden">Display name <span>optional</span><input id="display-name" maxlength="60" placeholder="Your name"></label><button id="auth-submit" class="btn primary" type="submit">Sign in</button></form><button id="auth-toggle" class="text-btn" type="button">Create an account</button><small class="auth-foot">Username and password only. No email.</small></div></section>
+<div id="app" class="app hidden"><aside class="sidebar"><div class="brand"><span class="brand-icon">N</span><div><b>nuvio</b><small>private space</small></div></div><button id="new-chat" class="btn new-chat">＋ <span>New conversation</span></button><div class="label">CONVERSATIONS</div><div id="conversation-list" class="conversation-list"></div><div class="side-footer"><button id="profile" class="profile-chip"></button><button id="signout" class="icon-btn" title="Sign out">↪</button></div></aside><main class="main"><header class="topbar"><div class="mobile-brand"><span class="brand-icon">N</span><b>nuvio</b></div><div class="top-actions"><button id="install" class="install-btn hidden">Install app</button><button id="find" class="icon-btn" title="Find people">⌕</button><button id="mobile-profile" class="icon-btn" title="Profile">●</button></div></header><section id="welcome" class="welcome"><div class="welcome-mark">N</div><div class="label">YOUR PRIVATE SPACE</div><h2>Conversations and files.<br><strong>One quiet place.</strong></h2><p>Find people by username, start private chats, and share your files without clutter.</p><div class="welcome-actions"><button id="find-start" class="btn primary">Find someone</button><button id="install-start" class="btn secondary hidden">Install Nuvio</button></div></section><section id="chat" class="chat hidden"><header class="chat-head"><button id="back" class="icon-btn back">‹</button><span id="chat-avatar" class="avatar">N</span><div><b id="chat-name">Conversation</b><small id="chat-user"></small></div><button id="chat-menu" class="icon-btn menu">⋯</button></header><div id="messages" class="messages"></div><form id="composer" class="composer"><input id="file" type="file" hidden><button id="attach" type="button" class="attach">＋</button><input id="message" maxlength="10000" autocomplete="off" placeholder="Message…"><button class="send" type="submit">↑</button></form></section></main></div><div id="modal" class="modal hidden"></div><script src="app.js"></script></body></html>
