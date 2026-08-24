@@ -1,10 +1,13 @@
 {
-  "name": "Nuvio",
-  "short_name": "Nuvio",
-  "description": "Private chat and file sharing",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#070a12",
-  "theme_color": "#0b1020",
-  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml"}]
+  "name":"Nuvio — Private Chat & Files",
+  "short_name":"Nuvio",
+  "description":"Private chat and file sharing between your devices.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "orientation":"portrait-primary",
+  "background_color":"#070a12",
+  "theme_color":"#0b1020",
+  "categories":["social","productivity"],
+  "icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
