@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { computeWalkingRoute, loadGoogleMaps } from './googleMaps'
 
 const screen = ref('home')
@@ -13,10 +13,8 @@ const active = ref(null)
 const guideDistance = ref(null)
 const guideDuration = ref(null)
 const mapError = ref('')
-const mapReady = ref(false)
 const findCode = ref('')
 const findResult = ref(null)
-const mapsConfigured = ref(Boolean(import.meta.env.VITE_GOOGLE_MAPS_API_KEY))
 
 const navOpen = computed(() => ['home', 'find', 'explore', 'saved', 'address', 'created'].includes(screen.value))
 
@@ -78,13 +76,9 @@ async function setupMap(container, center, zoom = 17) {
   mapError.value = ''
   try {
     const maps = await loadGoogleMaps()
-    const { Map } = maps
-    const map = new Map(container, { center, zoom, mapId: 'DEMO_MAP_ID', streetViewControl: false, fullscreenControl: false, mapTypeControl: false, clickableIcons: false })
-    mapReady.value = true
+    const map = new maps.Map(container, { center, zoom, mapId: 'DEMO_MAP_ID', streetViewControl: false, fullscreenControl: false, mapTypeControl: false, clickableIcons: false })
     return map
   } catch (error) {
-    mapReady.value = false
-    mapsConfigured.value = Boolean(import.meta.env.VITE_GOOGLE_MAPS_API_KEY)
     mapError.value = error.message
     return null
   }
@@ -102,7 +96,7 @@ async function initCreateMap() {
   createMap.addListener('click', event => {
     if (!event.latLng) return
     coords.value = { lat: event.latLng.lat(), lng: event.latLng.lng() }
-    if (createMarker) createMarker.position = coords.value
+    createMarker.position = coords.value
   })
 }
 
@@ -116,7 +110,7 @@ async function initGuideMap() {
   const { AdvancedMarkerElement } = await maps.importLibrary('marker')
   destinationMarker = new AdvancedMarkerElement({ map: guideMap, position: { lat: active.value.lat, lng: active.value.lng }, title: active.value.label })
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => updateGuidePosition(position), () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 })
+    navigator.geolocation.getCurrentPosition(updateGuidePosition, () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 })
     watchId = navigator.geolocation.watchPosition(updateGuidePosition, () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 })
   }
 }
@@ -144,9 +138,7 @@ async function updateGuidePosition(position) {
       guideDistance.value = route.distanceMeters != null ? route.distanceMeters / 1000 : null
       guideDuration.value = route.durationMillis != null ? Math.round(route.durationMillis / 60000) : null
     }
-  } catch (error) {
-    mapError.value = error.message
-  }
+  } catch (error) { mapError.value = error.message }
 }
 
 function distanceMeters(a, b, c, d) {
@@ -170,8 +162,9 @@ async function guideTo(place) {
   if (!place) return
   active.value = place
   mapError.value = ''
+  guideDistance.value = null
+  guideDuration.value = null
   screen.value = 'guide'
-  await initGuideMap()
 }
 
 function searchCiwaan() {
@@ -181,10 +174,11 @@ function searchCiwaan() {
 
 function useFindResult() { if (findResult.value) showSaved(findResult.value) }
 
-function handleScreenMap() {
-  if (screen.value === 'guide') initGuideMap()
-  if (screen.value === 'confirm') initCreateMap()
-}
+watch(screen, async value => {
+  if (value !== 'guide') stopGuide()
+  if (value === 'confirm') await initCreateMap()
+  if (value === 'guide') await initGuideMap()
+})
 
 onBeforeUnmount(stopGuide)
 </script>
@@ -212,7 +206,7 @@ onBeforeUnmount(stopGuide)
       </section>
 
       <section v-else-if="screen === 'confirm'" class="flow-card wide">
-        <button class="back" @click="screen = 'create'">← Back</button><div class="section-kicker">CONFIRM LOCATION</div><h2>Pin the exact spot.</h2><p>Drag your location by tapping the map. Google Maps provides the map and road data.</p>
+        <button class="back" @click="screen = 'create'">← Back</button><div class="section-kicker">CONFIRM LOCATION</div><h2>Pin the exact spot.</h2><p>Tap anywhere on the Google map to adjust the pin.</p>
         <div v-if="mapError" class="notice">{{ mapError }}</div><div id="create-map" class="real-map"></div>
         <div class="coordinate-card"><span>⌖</span><div><b>{{ formatCoords(coords) }}</b><small>{{ precision === 'exact' ? 'Exact location' : 'General location' }}</small></div></div><input v-model="label" class="name-input" maxlength="60" placeholder="Name this place (e.g. My Home)"><button class="primary-cta full" @click="savePlace">Create my Ciwaan <span>→</span></button>
       </section>
@@ -236,7 +230,3 @@ onBeforeUnmount(stopGuide)
     <div v-if="permissionOpen" class="modal-backdrop" @click.self="closePermission"><div class="permission-modal"><div class="permission-icon">⌖</div><h3>Allow location for Ciwaan?</h3><p>Ciwaan needs your location to place your address on the map. Guide Me also uses your live position while navigating.</p><p class="modal-note">You can deny this permission and still use features that don't need your current location.</p><div class="modal-actions"><button @click="closePermission">Not now</button><button class="primary-cta" @click="requestLocation">Continue</button></div></div></div>
   </div>
 </template>
-
-<script>
-export default { async mounted() { await nextTick(); if (this.screen === 'guide') this.handleScreenMap() } }
-</script>
