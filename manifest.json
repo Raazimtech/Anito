@@ -1,0 +1,13 @@
+{
+  "name": "Ciwaan — Every place has an address",
+  "short_name": "Ciwaan",
+  "description": "Create, share and navigate to simple digital addresses.",
+  "start_url": "/ciwaan/",
+  "scope": "/ciwaan/",
+  "display": "standalone",
+  "background_color": "#f7faf8",
+  "theme_color": "#087f5b",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["navigation", "utilities", "maps"]
+}
