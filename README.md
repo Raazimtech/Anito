@@ -3,22 +3,13 @@
 Ciwaan gives physical places a simple shareable digital address and live walking navigation.
 
 ### Stack
-Vue 3 + Vite + Capacitor + Google Maps JavaScript API + Google Routes Library.
+Vue 3 + Vite + Capacitor + MapLibre GL JS + OpenStreetMap map tiles + Valhalla pedestrian routing.
 
-### Google Maps setup
+### Map and routing
 
-Google Maps Platform requires an API key and billing for production use. Enable:
+Ciwaan does not require a Google Maps API key. MapLibre renders the map, OpenStreetMap supplies the map tiles, and the public Valhalla OpenStreetMap routing service calculates pedestrian routes during development/testing.
 
-- Maps JavaScript API
-- Routes API
-
-Create a browser-restricted key and put it in a local `.env` file:
-
-```bash
-VITE_GOOGLE_MAPS_API_KEY=your_key_here
-```
-
-See `.env.example` for the variable name. Do not commit your real `.env` file.
+The public routing service has fair-use limits. Before a high-traffic production launch, use a dedicated routing/tile provider or self-host the services rather than relying on public infrastructure.
 
 ### Web
 
@@ -27,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Vite is configured to expose the dev server on the local network, so the terminal also shows a `Network:` URL for testing on a phone connected to the same Wi-Fi.
+Vite exposes the dev server on the local network, so the terminal shows a `Network:` URL for testing on a phone connected to the same Wi-Fi.
 
 ### Android
 
@@ -42,16 +33,17 @@ Capacitor generates the Android Studio project locally; Android Studio then buil
 
 ### Core behavior
 
-- Create: asks for location permission in context, then opens a real Google map.
-- Exact location: uses high-accuracy device GPS and allows map pin adjustment.
-- General location: uses the device location flow but labels the saved Ciwaan as general.
+- Create: explains location use before requesting the device permission.
+- Exact location: uses high-accuracy device GPS and opens a real MapLibre map with a draggable pin.
+- General location: uses the location flow and records the chosen precision as general.
 - Find: looks up locally saved Ciwaan codes.
-- Explore: opens the Find/saved-place flow.
-- Share: creates a WhatsApp message containing the Ciwaan code and Google Maps location link.
-- Guide Me: watches live device location and recalculates a walking route with Google Routes.
+- Explore: opens Find and saved-place flows.
+- Share: creates a WhatsApp message containing the Ciwaan code and an OpenStreetMap location link.
+- Guide Me: watches live device location and recalculates a pedestrian route through Valhalla while navigation is active.
+- Responsive UI: adapts between phone, tablet and desktop layouts.
 
 ### Privacy
 
-See `PRIVACY.md` and the in-app Privacy Policy. Exact Ciwaans are intentionally shareable to anyone holding the code/link.
+See `PRIVACY.md` and the in-app Privacy Policy. Ciwaan currently stores created addresses locally in the browser/device; it does not require an account or a cloud database for the current MVP. Exact Ciwaans are intentionally shareable to anyone holding the code/link.
 
 Made by Raazim Tech
